@@ -1,0 +1,21 @@
+<html>
+<head>
+  <style>
+    body {
+      margin: 0px;
+    }
+  </style>
+</head>
+  <body>
+    <canvas id="canvas1"></canvas>
+    <input type="range" min="1" max="360" id="Input" style="transform: fixed;" value="180">
+    <input type="range" min="1" max="720" id="InputOktav" style="transform: fixed;" value="10">
+    <script>
+      var ctx = document.getElementById("canvas1").getContext("2d")
+      ctx.canvas.width = window.innerWidth;
+      ctx.canvas.height = window.innerHeight;
+    </script>
+    <script src="classes.js"></script>
+    <script src="canvas.js"></script>
+  </body>
+</html>
