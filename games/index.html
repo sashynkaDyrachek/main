@@ -1,14 +1,58 @@
-<!DOCTYPE html>
 <html>
 <head>
-	<title>Games</title>
+  
+  <link rel="stylesheet" href="first_css.css">
+  <title>сайт Ильи Калинина</title>
+
 </head>
-<body>
-  <ul>
-  	<li><a href = 'TTT/index.html'>tic-tac toy</a></li>
-  	<li><a href = 'Physics/index.html'>Physics enjine</a></li>
-  	<li><a href = 'tetris/index.html'>tetris</a></li>
-  	<li><a href = 'ITgame/index.html'>ITgame</a></li>
-  </ul>
+<body style = "margin: 0px;">
+
+        <nav class="nav">
+          <a class="center_nav_link" name="nav_link" href = 'ITgame/index.html'>It game</a>
+          <a class="center_nav_link" name="nav_link" href = 'Physics/index.html'>Physics engine</a>
+          <a class="center_nav_link" name="nav_link" href = 'terraria copy/index.html'>terraria copy</a>
+          <a class="center_nav_link" name="nav_link" href = 'tetris/index.html'>tetris</a>
+          <a class="center_nav_link" name="nav_link" href = 'TTT/index.html'>Tic tac toy</a>
+        </nav>
+
+  <header class="header">
+    <div class="container">
+      <div class="header_inner">
+        <a class="head_logo" href = '../index.html'>Шо</a>
+
+        <nav class="nav">
+          <a class="nav_link" href = 'games/index.html'>Games</a>
+          <a class="nav_link" href = '../about/index.html'>About</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div class="intro">
+    <div class="container">
+      <div class="intro_title">
+        <h1>Сайти Ильи Калинина</h1>
+      </div>
+    </div>
+  </div>
+
+
+  <script type="text/javascript">
+    var step = Math.min(window.innerWidth, window.innerHeight)/4
+    rotation = 0;
+    setInterval(function() {
+      x = window.innerWidth/2;
+      y = window.innerHeight/2;
+      nav_list = document.getElementsByName("nav_link")
+      for (i = 0; i < nav_list.length; i++) {
+        qx = Math.cos(((360 / nav_list.length) * i) * (Math.PI/180) + rotation) * step
+        qy = -Math.sin(((360 / nav_list.length) * i) * (Math.PI/180) + rotation) * step
+        nav_list[i].style.marginLeft = x + qx
+        nav_list[i].style.marginTop = y + qy
+      }
+      rotation += 0.001
+    }, 10)
+  </script>
+
 </body>
 </html>
