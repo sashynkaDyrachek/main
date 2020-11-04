@@ -51,21 +51,21 @@ const Physics = function (obj, m) {
 			if (this.obj.pos.x == Lobj.pos.x && this.obj.pos.y == Lobj.pos.y && this.obj.r == Lobj.r) {continue}
 			q = this.obj.getDist(Lobj.pos) - Lobj.getEDist(this.obj.pos)
 			if (q < 0) {
-				obj.translate(new Vector2(Lobj.pos.x - obj.pos.x, Lobj.pos.y - obj.pos.y).setLength(q))
+				this.addVelocity(new Vector2(Lobj.pos.x - obj.pos.x, Lobj.pos.y - obj.pos.y).setLength(q/5))
 
 			}
 		}
 		if (this.obj.pos.y + this.obj.r > ctx.canvas.height) {
-			obj.translate(new Vector2(0, -1).setLength(-(this.obj.getDist(new Vector2(obj.pos.x, ctx.canvas.height)))))
+			this.addVelocity(new Vector2(0, -1).setLength(-(this.obj.getDist(new Vector2(obj.pos.x, ctx.canvas.height)))/5))
 		}
 		if (this.obj.pos.y - this.obj.r < 0) {
-			obj.translate(new Vector2(0, 1).setLength(-(this.obj.getDist(new Vector2(obj.pos.x, 0)))))
+			this.addVelocity(new Vector2(0, 1).setLength(-(this.obj.getDist(new Vector2(obj.pos.x, 0)))/5))
 		}
 		if (this.obj.pos.x + this.obj.r > ctx.canvas.width) {
-			obj.translate(new Vector2(-1, 0).setLength(-(this.obj.getDist(new Vector2(ctx.canvas.width, obj.pos.y)))))
+			this.addVelocity(new Vector2(-1, 0).setLength(-(this.obj.getDist(new Vector2(ctx.canvas.width, obj.pos.y)))/5))
 		}
 		if (this.obj.pos.x - this.obj.r < 0) {
-			obj.translate(new Vector2(1, 0).setLength(-(this.obj.getDist(new Vector2(0, obj.pos.y)))))
+			this.addVelocity(new Vector2(1, 0).setLength(-(this.obj.getDist(new Vector2(0, obj.pos.y)))/5))
 		}
 		//new Ray(obj.pos.x, obj.pos.y, this.velocity.x, this.velocity.y).norm(10).draw()
 	}

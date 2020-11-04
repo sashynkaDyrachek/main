@@ -10,6 +10,13 @@
 	background-size: cover;
 }
 
+.intro_title {
+	font-size: 150px;
+	font-weight: 700px;
+	text-align: center;
+
+}
+
 .container {
 	width: 100%;
 	max-width: 1200px;
@@ -47,8 +54,19 @@ nav.nav {
 	display: inline-block;
 	vertical-align: top;
 	margin: 0 15px;
-	position: relative;
+	position: absolute;/* relative;*/
 	color: #666;
+
+	text-decoration: none;
+}
+
+.nav_linkk {
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 15px;
+	position: absolute;
+	color: #666;
+
 
 	text-decoration: none;
 }
