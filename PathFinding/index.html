@@ -1,0 +1,83 @@
+<html>
+<head>
+	<title>A*</title>
+	<style type="text/css">
+		* {
+			margin: 0px;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canv1"></canvas>
+	<script type="text/javascript">
+		var ctx = document.getElementById("canv1").getContext("2d")
+		ctx.canvas.width = width = window.innerWidth
+		ctx.canvas.height = height = window.innerHeight
+	</script>
+	<script type="text/javascript">
+		const Vector2 = function(x, y) {
+			this.x = x
+			this.y = y
+
+			this.copy = function() {
+				return new Vector2(this.x, this.y)
+			}
+
+			this.Dist = function(p) {
+				return Math.sqrt(Math.pow(this.x - p.x, 2) + Math.pow(this.y - p.y, 2))
+			}
+
+			this.Sum = function(p) {
+				return new Vector2(this.x + p.x, this.y + p.y)
+			}
+		}
+ 	</script>
+	<script type="text/javascript">
+		ctx.fillStyle = "#FFFFFF"
+		PixSize = 20
+		startP = new Vector2(0, 0)
+		endP = new Vector2(Math.floor(width/PixSize)/2, Math.floor(height/PixSize)/2)
+		window.onclick = function() {
+			startP = new Vector2(Math.floor(event.clientX/PixSize), Math.floor(event.clientY/PixSize))
+		}
+
+		function find() {
+			//console.log(Math.floor(startP.Dist(endP)))
+			var w = Infinity
+			var nextX = 0
+			var nextY = 0
+			var res = [startP.copy()]
+			var i = 0
+			while (Math.floor(endP.Dist(res[res.length-1])) > 1 && i < 64) {
+				for (x = -1; x <= 1; x++) {
+					for (y = -1; y <= 1; y++) {
+						if (x == 0 && y == 0) {continue}
+						Nw = endP.Dist(res[res.length-1].Sum(new Vector2(x, y)))
+						if (Nw < w) {
+							nextX = x
+							nextY = y
+							w = Nw
+						}
+					}
+				}
+				res[res.length] = new Vector2(res[res.length-1].x + nextX, res[res.length-1].y + nextY)
+				i++
+			}
+			return res
+		}
+
+		setInterval(function() {
+			ctx.fillRect(0, 0, width, height)
+
+			path = find()
+
+			for (var i = 0; i < path.length; i++) {
+				ctx.strokeRect(path[i].x * PixSize, path[i].y * PixSize, PixSize, PixSize)
+			}
+
+			ctx.strokeRect(startP.x * PixSize, startP.y * PixSize, PixSize, PixSize)
+			ctx.strokeRect(endP.x * PixSize, endP.y * PixSize, PixSize, PixSize)
+		}, 100)
+	</script>
+</body>
+</html>
