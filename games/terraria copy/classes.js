@@ -8,12 +8,30 @@ const Elength = function(Vector2) {
 	return Math.sqrt(Math.pow(Vector2.x, 2) + Math.pow(Vector2.y, 2))
 }
 
+const Interval = function(num, min, max) {
+	let q = max - min + 1
+	q = num % q
+	return min + q
+}
+
+const Lerp = function(x1, y1, x2, y2, x) {
+	let P = y1 + ((y2 - y1)/(x2 - x1))*(x - x1)
+	return P
+}
+
+const Belerp = function(x1, y1, x2, y2, z1, z2, z3, z4, x, y) {
+	let P1 = Lerp(x1, z1, x2, z2, x)
+	let P2 = Lerp(x2, z3, x1, z4, x)
+	return Math.floor(Line_Interpole(y1, P1, y2, P2, y))
+}
+
 const Vector2 = function(x, y) {
 	this.x = x;
 	this.y = y;
 
 	this.normalize = function () {
    		var q = Elength(this)
+   		if (q == 0) {return this}
    		this.x /= q
    		this.y /= q
    		return this
@@ -28,6 +46,10 @@ const Vector2 = function(x, y) {
 
   	this.getLength = function() {
   		return Elength(this)
+  	}
+
+  	this.copy = function () {
+  		return new Vector2(this.x, this.y)
   	}
 }
 
@@ -56,16 +78,16 @@ const Physics = function (obj, m) {
 			}
 		}
 		if (this.obj.pos.y + this.obj.r > ctx.canvas.height) {
-			this.addVelocity(new Vector2(0, -1).setLength(-(this.obj.getDist(new Vector2(obj.pos.x, ctx.canvas.height)))/5))
+			this.addVelocity(new Vector2(0, -1).setLength((this.obj.getDist(new Vector2(obj.pos.x, ctx.canvas.height)))/5))
 		}
 		if (this.obj.pos.y - this.obj.r < 0) {
-			this.addVelocity(new Vector2(0, 1).setLength(-(this.obj.getDist(new Vector2(obj.pos.x, 0)))/5))
+			this.addVelocity(new Vector2(0, 1).setLength((this.obj.getDist(new Vector2(obj.pos.x, 0)))/5))
 		}
 		if (this.obj.pos.x + this.obj.r > ctx.canvas.width) {
-			this.addVelocity(new Vector2(-1, 0).setLength(-(this.obj.getDist(new Vector2(ctx.canvas.width, obj.pos.y)))/5))
+			this.addVelocity(new Vector2(-1, 0).setLength((this.obj.getDist(new Vector2(ctx.canvas.width, obj.pos.y)))/5))
 		}
 		if (this.obj.pos.x - this.obj.r < 0) {
-			this.addVelocity(new Vector2(1, 0).setLength(-(this.obj.getDist(new Vector2(0, obj.pos.y)))/5))
+			this.addVelocity(new Vector2(1, 0).setLength((this.obj.getDist(new Vector2(0, obj.pos.y)))/5))
 		}
 		//new Ray(obj.pos.x, obj.pos.y, this.velocity.x, this.velocity.y).norm(10).draw()
 	}
@@ -84,6 +106,7 @@ const Inp = function() {
 	this.mousePos = new Vector2(1, 1);
 	this.mousePressed = -1;
 	this.keyPressed = " ";
+	this.axis = new Vector2(0, 0)
 }
 
 const Dine = function(x, y, ex, ey) {
@@ -136,7 +159,7 @@ const Ellipse = function (x, y, r, m) {
 
 const Square = function (x, y, s) {
 	this.pos = new Vector2 (x, y);
-	this.s = s/2;
+	this.r = s/2;
 	this.physics = new Physics(this)
 
 	this.translate = function(p) {
@@ -146,25 +169,22 @@ const Square = function (x, y, s) {
 			
 	this.draw = function() {
 		ctx.beginPath()
-		ctx.moveTo(this.pos.x-this.s, this.pos.y-this.s)
-		ctx.lineTo(this.pos.x+this.s, this.pos.y-this.s)
-		ctx.lineTo(this.pos.x+this.s, this.pos.y+this.s)
-		ctx.lineTo(this.pos.x-this.s, this.pos.y+this.s)
-		ctx.lineTo(this.pos.x-this.s, this.pos.y-this.s)
+		ctx.moveTo(this.pos.x-this.r, this.pos.y-this.r)
+		ctx.lineTo(this.pos.x+this.r, this.pos.y-this.r)
+		ctx.lineTo(this.pos.x+this.r, this.pos.y+this.r)
+		ctx.lineTo(this.pos.x-this.r, this.pos.y+this.r)
+		ctx.lineTo(this.pos.x-this.r, this.pos.y-this.r)
 		ctx.stroke()
 	}
 
 	this.getEDist = function(p) {
-		vect = new Vector2(this.pos.x - p.x, this.pos.y - p.y)
-		q = Math.max(Math.abs(vect.x), Math.abs(vect.y))
-		vect.x = (vect.x/q)*this.s.x
-		vect.y = (vect.y/q)*this.s.y
-		new Ray(this.pos.x, this.pos.y, vect.x, vect.y).draw()
-		return Elength(vect)
+		var q = new Vector2(this.pos.x - p.x, this.pos.y - p.y)
+  		return Elength(q) - this.getDist(p)
 	}
 
 	this.getDist = function(p) {
-		return -length(p, this.pos)-this.getEDist(p)
+		var q = new Vector2(Math.abs(p.x - this.pos.x) - this.r, Math.abs(p.y - this.pos.y) - this.r);
+  		return Math.abs(Elength(new Vector2(Math.max(q.x, 0), Math.max(q.y, 0))) + Math.min(Math.max(q.x, q.y), 0));
 	}
 }
 
@@ -221,6 +241,7 @@ const Ray = function(x, y, vectX = 0, vectY = 0) {
 	this.look = function(pos) {
 		this.vect.x = pos.x - this.pos.x;
 		this.vect.y = pos.y - this.pos.y;
+		return this
 	}
 
 	this.draw = function() {
