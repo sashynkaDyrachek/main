@@ -1,1 +1,1 @@
-location = "https://sashynkadyrachek.github.io/main/index.html"
+location = "https://sashynkadyrachek.github.io/main/games/index.html"
