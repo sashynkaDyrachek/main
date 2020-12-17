@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>matrix</title>
+
+	<style type="text/css">
+		input {
+			width: 15px;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<button id="plusC">+</button>
+		<button id="plusR">+</button>
+		<button id="minusC">-</button>
+		<button id="minusR">-</button>
+
+		<div id="matr1">
+			<div id="ros1"></div>
+		</div><br>
+
+		<input id="func" style="color: #FF0000;"><br><br>
+
+		<div id="matr2">
+			<div id="ros2"></div>
+		</div>
+
+		<button id="2plusC">+</button>
+		<button id="2plusR">+</button>
+		<button id="2minusC">-</button>
+		<button id="2minusR">-</button><br>
+
+		<button id="res">res</button>
+
+		<div id="matrRes">
+			<div id="rosRes"></div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		var btnPC = document.getElementById("plusC")
+		var btnMC = document.getElementById("minusC")
+		var btnPR = document.getElementById("plusR")
+		var btnMR = document.getElementById("minusR")
+		var btnPC2 = document.getElementById("2plusC")
+		var btnMC2 = document.getElementById("2minusC")
+		var btnPR2 = document.getElementById("2plusR")
+		var btnMR2 = document.getElementById("2minusR")
+		var resBtn = document.getElementById("res")
+
+		var matr1 = []
+		var matr2 = []
+		var matrRes = []
+		btnPC.onclick = function() {
+			for (var i = 0; i < document.getElementById("matr1").children.length; i++) {
+				var inp = document.createElement("input")
+				document.getElementById("matr1").children[i].appendChild(inp)
+			}
+		}
+
+		btnMC.onclick = function() {
+			for (var i = 0; i < document.getElementById("matr1").children.length; i++) {
+				document.getElementById("matr1").children[i].removeChild(document.getElementById("matr1").children[i].lastChild)
+			}
+		}
+
+		btnPR.onclick = function() {
+			var ros = document.createElement("div")
+			for (var i = 0; i < document.getElementById("ros1").children.length; i++) {
+				var inp = document.createElement("input")
+				ros.appendChild(inp)
+				document.getElementById("matr1").appendChild(ros)
+			}
+		}
+
+		btnMR.onclick = function() {
+			document.getElementById("matr1").removeChild(document.getElementById("matr1").lastChild)
+		}
+
+		btnPC2.onclick = function() {
+			for (var i = 0; i < document.getElementById("matr2").children.length; i++) {
+				var inp = document.createElement("input")
+				document.getElementById("matr2").children[i].appendChild(inp)
+			}
+		}
+
+		btnMC2.onclick = function() {
+			for (var i = 0; i < document.getElementById("matr2").children.length; i++) {
+				document.getElementById("matr2").children[i].removeChild(document.getElementById("matr2").children[i].lastChild)
+			}
+		}
+
+		btnPR2.onclick = function() {
+			var ros = document.createElement("div")
+			for (var i = 0; i < document.getElementById("ros2").children.length; i++) {
+				var inp = document.createElement("input")
+				ros.appendChild(inp)
+				document.getElementById("matr2").appendChild(ros)
+			}
+		}
+
+		btnMR2.onclick = function() {
+			document.getElementById("matr2").removeChild(document.getElementById("matr2").lastChild)
+		}
+
+		resBtn.onclick = function() {
+			var ma1 = document.getElementById("matr1").children
+			var ma2 = document.getElementById("matr2").children
+			for (var x = 0; x < ma1.length; x++) {
+				if (matr1[x] == undefined) {matr1[x] = []}
+				for (var y = 0; y < ma1[x].children.length; y++) {
+					matr1[x][y] = +ma1[x].children[y].value
+				}
+			}
+
+			for (var x = 0; x < ma2.length; x++) {
+				if (matr2[x] == undefined) {matr2[x] = []}
+				for (var y = 0; y < ma2[x].children.length; y++) {
+					matr2[x][y] = +ma2[x].children[y].value
+				}
+			}
+
+			if (document.getElementById("func").value == "+") {
+				for (var x = 0; x < Math.max(matr1.length, matr2.length); x++) {
+					if (matr1[x] == undefined) {matr1[x] = []}
+					if (matr2[x] == undefined) {matr2[x] = []}
+					if (matrRes[x] == undefined) {matrRes[x] = []}
+					for (var y = 0; y < Math.max(matr1[x].length, matr2[x].length); y++) {
+						if (matr1[x][y] == undefined) {matr1[x][y] = 0}
+						if (matr2[x][y] == undefined) {matr2[x][y] = 0}
+
+						matrRes[x][y] = matr1[x][y] + matr2[x][y]
+					} 
+				}
+			} else if (document.getElementById("func").value == "-") {
+				for (var x = 0; x < Math.max(matr1.length, matr2.length); x++) {
+					if (matr1[x] == undefined) {matr1[x] = []}
+					if (matr2[x] == undefined) {matr2[x] = []}
+					if (matrRes[x] == undefined) {matrRes[x] = []}
+					for (var y = 0; y < Math.max(matr1[x].length, matr2[x].length); y++) {
+						if (matr1[x][y] == undefined) {matr1[x][y] = 0}
+						if (matr2[x][y] == undefined) {matr2[x][y] = 0}
+
+						matrRes[x][y] = matr1[x][y] - matr2[x][y]
+					} 
+				}
+			}
+			console.log(matrRes)
+		}
+	</script>
+</body>
+</html>
