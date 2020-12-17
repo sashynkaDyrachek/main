@@ -14,8 +14,14 @@
 
 	<div id="A"></div>
 	<div id="B"></div>
-	<input id="mInp">
+	<input list="moves" id="mInp"/>
 	<div id="otputdiv"></div>
+
+	<datalist id="moves">
+    	<option value="|"/>
+    	<option value="&"/>
+    	<option value="="/>
+	</datalist>
 
 	<script type="text/javascript">
 		var outdiv = document.getElementById("otputdiv")
