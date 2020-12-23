@@ -16,6 +16,8 @@
 	<div id="B"></div>
 	<input list="moves" id="mInp"/>
 	<div id="otputdiv"></div>
+	<button id="chageA">A</button>
+	<button id="chageB">B</button>
 
 	<datalist id="moves">
     	<option value="|"/>
@@ -30,6 +32,19 @@
 		var MinpDiv = document.getElementById("mInp")
 		var A = false
 		var B = false
+
+		document.getElementById("chageA").onclick = function() {
+			for (var i = 0; i < 2**2; i++) {
+				Adiv.childNodes[2 * i].value = outdiv.childNodes[i].innerHTML
+			}
+		}
+
+		document.getElementById("chageB").onclick = function() {
+			for (var i = 0; i < 2**2; i++) {
+				Bdiv.childNodes[2 * i].value = outdiv.childNodes[i].innerHTML
+			}
+		}
+
 		function output(text, div, i) {
 			div.childNodes[i].innerHTML = text
 		}

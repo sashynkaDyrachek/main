@@ -61,6 +61,11 @@ nav.nav {
 	text-decoration: none;
 }
 
+.nav_link:hover {
+	color: #AAA;
+	cursor: crosshair;
+}
+
 .center_nav_link {
 	display: inline-block;
 	vertical-align: top;
@@ -70,9 +75,4 @@ nav.nav {
 
 
 	text-decoration: none;
-}
-
-.nav_link:hover {
-	color: #AAA;
-	cursor: crosshair;
 }

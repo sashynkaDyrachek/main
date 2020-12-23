@@ -18,7 +18,6 @@ sceen = []
 startv = 8339776474
 
 
-
 width = ctx.canvas.width
 height = ctx.canvas.height
 

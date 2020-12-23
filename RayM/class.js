@@ -1,3 +1,7 @@
+const rgb = function(r, g, b) {
+	return r.toString(16) + g.toString(16) + b.toString(16)
+}
+
 const length2 = function(Vector2, Vector21) {
 	return Math.sqrt(Math.pow(Vector2.x - Vector21.x, 2) + Math.pow(Vector2.y - Vector21.y, 2))
 }
@@ -28,9 +32,13 @@ const Interval = function(num, min, max) {
 	return min + q
 }
 
-const smin = function(a, b, k) {
-	var h = Math.max(k - Math.abs(a - b), 0) / k
-	return Math.min(a, b) - (h * h * h * k * (1/4));
+const mix = function (d1, d2, d3) {
+	return (d1 + d2 + d3) / 3
+}
+
+const smin = function (d1, d2, k) {
+    var h = Math.max(k - Math.abs(d1 - d2), 0.0);
+    return Math.min(d1, d2) - h * h * 0.25 / k;
 }
 
 const Vector2 = function(x, y) {
@@ -292,15 +300,16 @@ const Ray3 = function(x, y, z) {
 		this.normalize()
 	}
 
-	this.March = function(vect, objects, main) {
+	this.March = function(vect, main) {
 		p = this.pos.copy()
 		let sphere = objects[0]
 		let plane = objects[1]
 		let box = objects[2]
+		let Light = objects[3]
 		vect.normalize()
-		for (let i=0; i<100; i++) {
-			l = Math.min(Math.min(sphere.getLen(p), box.getLen(p)), plane.getLen(p));
-			if (l < 0.01) {
+		for (let i=0; i<250; i++) {
+			l = Math.min(Math.max(-sphere.getLen(p), box.getLen(p)), plane.getLen(p));
+			if (l < 0.001) {
 				if (main) {operations = i}
 				return p
 			}
