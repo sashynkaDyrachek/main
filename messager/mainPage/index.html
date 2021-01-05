@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <style>
+            body {
+                background-color: #ff9050;
+                margin: 0px;
+                /*height: 200%;*/
+            }
+
+            nav.left_nav {
+                position: fixed;
+                display: block;
+                height: 100vh;
+                width: 25vw;
+                margin: 0px;
+
+                background-color: #88888888;
+
+                text-align: center;
+            }
+
+            nav.left_nav input {
+                display: block;
+                width: 100%;
+                margin: 2px;
+
+                border: none;
+                background: none;
+
+                color: #ffbf50;
+                text-align: center;
+            }
+
+            nav.left_nav input:hover {
+                color: #ffeac5;
+                border-radius: 24px;
+                background-color: #ffd58a88;
+            }
+
+            nav.left_nav h1 {
+                margin: 2px;
+            }
+
+            nav.upper_nav {
+                display: block;
+                margin: 0px;
+                margin-left: 25vw;
+                width: 75vw;
+                height: 25vh;
+
+                background-color: #ffbf5088;
+
+                text-align: center;
+            }
+
+            iframe.centre_window {
+                margin-left: 25vw;
+                border: none;
+                width: 75vw;
+                height: 75vh;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="left_nav">
+            <h1>VK?</h1>
+            <input type="button" value="feed" onclick='iframe.src = "pages/feed.html"'>
+            <input type="button" value="messages" onclick='iframe.src = "pages/messages.html"'>
+        </nav>
+        <nav class="upper_nav">
+            <p name="nickname">Nickname</p>
+        </nav>
+        <iframe src="pages/feed.html" class="centre_window"></iframe>
+        <script>
+            iframe = document.querySelector("iframe")
+
+            dbLogin = openDatabase("loginpass", "0.1", "List of loggins.", 100)
+            dbLogin.transaction(function (tx) {
+                tx.executeSql("SELECT * FROM DATA WHERE id = " + window.localStorage.getItem("id"), [], function (tx, results) {
+                    document.getElementsByName("nickname")[0].innerHTML = results.rows[0].nickname
+                }, function(tx, error) {console.log(error)})
+            })
+        </script>
+    </body>
+</html>

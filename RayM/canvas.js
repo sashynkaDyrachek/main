@@ -31,6 +31,8 @@ window.onmousedown = function() {
 	lightRay.pos = new Vector3(input.mousePos.x, input.mousePos.y, 0)
 }
 
+v = 1234567890123456
+
 //Octahedron Sphere Box Plane Thorus
 var ray = new Ray3(50, 150, 20);
 var lightRay = new Ray3(85, 85, 0);
@@ -50,21 +52,21 @@ h = ctx1.canvas.height/pix
 offsetY = -250
 offsetX = -90
 setInterval(function loop() {
-	box.rotation.y += 0.1
-	box.rotation.x += 0.1
+	//box.rotation.y += 0.1
+	//box.rotation.x += 0.1
 
 	lightObj.pos = lightRay.pos
 
 	document.getElementById("Output").innerHTML = ray.pos.x + ", " + ray.pos.y + ", " + ray.pos.z
 
 
-	ctx.moveTo(ray.pos.x, ray.pos.y)
+	/*ctx.moveTo(ray.pos.x, ray.pos.y)
 	let q = new Vector2(Math.sin(offsetY * (90/pix) * (Math.PI/180)), -Math.cos(offsetY * (90/pix) * (Math.PI/180))).setLength(100)
 	ctx.lineTo(ray.pos.x + q.x, ray.pos.y + q.y)
 	ctx.moveTo(ray.pos.x, ray.pos.y)
 	q = new Vector2(Math.sin((pix + offsetY) * (90/pix) * (Math.PI/180)), -Math.cos((pix + offsetY) * (90/pix) * (Math.PI/180))).setLength(100)
 	ctx.lineTo(ray.pos.x + q.x, ray.pos.y + q.y)
-	ctx.stroke()
+	ctx.stroke()*/
 
 	for (x = 0; x < pix; x++) {
 		for (y = 0; y < pix; y++) {
@@ -74,6 +76,7 @@ setInterval(function loop() {
 				lighted = lightRay.March(lightRay.vect, true)
 				if (Math.floor(lighted.x) == Math.floor(fillStyle1.x)) {
 					operations = (200 - Math.floor(operations)).toString(16)
+					if (operations.length == 1) {operations = "0" + operations}
 					ctx1.fillStyle = "#" + operations + operations + operations
 				} else {ctx1.fillStyle = "#000000"}
 			} else {ctx1.fillStyle = "#FFFFFF"}
@@ -83,9 +86,9 @@ setInterval(function loop() {
 		}
 	}
 
-	new Ellipse(sphere.pos.x, sphere.pos.y, sphere.r).draw()
+	/*new Ellipse(sphere.pos.x, sphere.pos.y, sphere.r).draw()
 	Dine(0, plane.y, ctx.canvas.width, plane.y)
 	new Square(lightRay.pos.x, lightRay.pos.y, 6).draw()
-	new Square(box.pos.x, box.pos.y, box.s*2).draw()
+	new Square(box.pos.x, box.pos.y, box.s*2).draw()*/
 
 }, 0.01)

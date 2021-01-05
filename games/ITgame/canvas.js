@@ -19,6 +19,12 @@ window.onmouseup = function() {
 	mousedown = false
 }
 
+window.onkeypress = function(event) {
+	if (event.key == "1") {mode = 1}
+	if (event.key == "2") {mode = 2}
+	if (event.key == "3") {mode = 3}
+}
+
 document.getElementById("s").max = Math.min(ctx.canvas.width, ctx.canvas.height)
 
 pixels = []
@@ -29,6 +35,7 @@ lastx = 0;
 lasty = 0;
 mousex = 0
 mousey = 0
+mode = 1
 
 ctx.fillStyle = "#FF0000"
 
@@ -43,7 +50,7 @@ function loop() {
 				pixels[mousex][mousey] = undefined
 			}
 		} else {
-			new Pixel(mousex, mousey, ctrl, alt)
+			new Pixel(mousex, mousey, ctrl, alt, mode == 2, mode == 3)
 		}
 		lastx = mousex
 		lasty = mousey

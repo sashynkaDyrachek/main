@@ -1,28 +1,24 @@
-function simplex(x, w) {
-	var xw = Math.floor(x/w)*w
-	var y = Line_Interpole(0, Interval(Srandom(v*xw), 0, 255), w, Interval(Srandom(v*(xw+w)), 0, 255), x%w)
-	//var y = Interval(Srandom(v * x), 0, height/2)
-	return Math.floor(y)
+window.onkeydown = function(event) {
+	if (event.key == "x") {offx+= pl}
+	if (event.key == "y") {offy+= pl}
+	if (event.key == "z") {offz+=0.1 * pl}
+	if (event.key == "h") {h+= pl}
+	if (event.key == "+") {pl = 1}
+	if (event.key == "-") {pl = -1}
 }
 
-function simplex2(x, y, w) {
-	return simplex(x, w)/2 + simplex(y, w)/2
-}
+v = 123456789123456
 
-ctx.canvas.onclick = function() {
-	h++
-}
+h = 10
 
-v = 8339776474
+var zoom = 200
 
-pw = width/50
-ph = height/50
+pw = width/zoom
+ph = height/zoom
 
-h = 1
-
-offx = 0
-offy = 0
-offz = 0
+offx = 1000
+offy = 1000
+offz = 1000
 
 setInterval(function() {
 	ctx.fillStyle = "#FFFFFF"
@@ -32,15 +28,22 @@ setInterval(function() {
 
 	ctx.moveTo(0, height/2)
 
-	for (var x = 0; x < 50; x++) {
-		for (var y = 0; y < 50; y++) {
-			//var w = ((simplex2(offx + x, offy + y, h) + simplex2(offx + x, offy + y, h+1))/2).toString(16)
-			var w = (255 - simplex2(offx + x, offy + y, h)).toString(16)
+	for (var x = 0; x < zoom; x++) {
+		for (var y = 0; y < zoom; y++) {
+			//var w = simplex(x, h)
+
+			var q = simplex3(x + offx, y + offy, offz, h)
+			//var q = Belerp(0, 0, width, height, 127, 0, 64, 64, pw * x, ph * y)
+			var w = Interval(q, 0, 255).toString(16)
+			if (w.length == 1) {w = "0" + w}
+			//var w = Interval(q, 0, height)
+
 			ctx.fillStyle = "#" + w + w + w
 			ctx.fillRect(pw * x, ph * y, pw, ph)
-			//ctx.lineTo(pw * x, height/2 + w)
+			//ctx.lineTo(pw * x, height - w)
 		}
 	}
+	//offz ++
 	//offx ++
 	//offy ++
 	ctx.stroke()

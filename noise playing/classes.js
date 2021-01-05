@@ -37,36 +37,6 @@ const Cuberp = function(x1, y1, z1, x2, y2, z2, w1, w2, w3, w4, w5, w6, w7, w8, 
 	return Math.floor(Lerp(z1, P1, z2, P2, z))
 }
 
-function random1(x) {
-	return v%x
-}
-
-function random2(x, y) {
-	return (v * y)%(x + y)
-}
-
-function random3(x, y, z) {
-	return (v * y *z)%((x + y + z))
-}
-
-function simplex(x, h) {
-	var zx = Math.floor(x/h)*h
-	return Lerp(0, random1(zx), h, random1(zx+h), x%h)
-}
-
-function simplex2(x, y, h) {
-	var zx = Math.floor(x/h)*h
-	var zy = Math.floor(y/h)*h
-	return Belerp(0, 0, h, h, random2(zx, zy), random2(zx + h, zy), random2(zx + h, zy + h), random2(zx, zy + h), x%h, y%h)
-}
-
-function simplex3(x, y, z, h) {
-	var zx = Math.floor(x/h)*h
-	var zy = Math.floor(y/h)*h
-	var zz = Math.floor(z/h)*h
-	return Cuberp(0, 0, 0, h, h, h, random3(zx, zy, zz), random3(zx + h, zy, zz), random3(zx + h, zy + h, zz), random3(zx, zy + h, zz), random3(zx, zy, zz + h), random3(zx + h, zy, zz + h), random3(zx + h, zy + h, zz + h), random3(zx, zy + h, zz + h), x%h, y%h, z%h)
-}
-
 const Vector2 = function(x, y) {
 	this.x = x;
 	this.y = y;

@@ -1,0 +1,119 @@
+<html>
+    <head>
+        <style>
+            body {
+                margin: 0px;
+            }
+            nav.bottom_nav {
+                position: fixed;
+                margin: 0px;
+                margin-top: 95vh;
+                width: 100vw;
+                height: 5vh;
+            }
+
+            nav.bottom_nav input {
+                margin: 0px;
+                padding: 0px;
+                height: 100%;
+                
+                border: none;
+            }
+
+            nav.bottom_nav input[type="text"] {
+                width: 90%;
+
+                border-radius: 24px;
+                background-color: #88888888;
+            }
+            
+            nav.bottom_nav input[type="button"] {
+                width: 9%;
+
+                background-color: #88998888;
+            }
+            
+            nav.main {
+                overflow: scroll;
+                width: 100vw;
+                height: 92vh;
+            }
+
+            nav.main p {
+                margin: 0px;
+                margin-top: 2px;
+                width: 99%;
+                height: 5%;
+            }
+            
+            nav.main p.self {
+                text-align: right;
+            }
+            
+            nav.main p.other {
+                text-align: left;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="bottom_nav">
+            <input type="text" id="message_input">
+            <input type="button" id="submitBtn" value="s">
+        </nav>
+        <nav class="main" id="mainNav">
+        </nav>
+        <script>
+            nav = document.getElementById("mainNav")
+            inp = document.getElementById("message_input")
+
+            function addMessage(author, content) {
+                var h = document.createElement("p")
+                dbLogin.transaction(function (tx) {
+                    tx.executeSql('SELECT * FROM DATA WHERE id = ' + window.localStorage.getItem("id"), [], function (tx, results) {
+                        if (results.rows[0].nickname == author) {
+                            h.className = "self"
+                            h.innerHTML = content
+                        } else {
+                            h.className = "other"
+                            h.innerHTML = author + ' >> ' + content
+                        }
+                    })
+                })
+                nav.append(h)
+            }
+
+            function send(author, recipent, content) {
+                dbLogin.transaction(function (tx){
+                    tx.executeSql('SELECT * FROM DATA WHERE id = ' + window.localStorage.getItem("id"), [], function(tx, results) {
+                        var name = results.rows[0].nickname
+                        db.transaction(function (tx) {
+                            tx.executeSql('INSERT INTO MESSAGES(author, recipent, content) VALUES ("' + name + '", "' + recipent + '", "' + content + '")', [], function(tx, results) {})
+                        })
+                    })
+                })
+            }
+
+            document.getElementById("submitBtn").onclick = inp.onsubmit = function () {
+                send("author", "recipent", inp.value)
+            }
+
+            dbLogin = openDatabase("loginpass", "0.1", "List of loggins.", 100)
+
+            db = openDatabase("messages", "0.2", "List of messages.", 100)
+
+            db.transaction(function (tx) {
+                //tx.executeSql("DROP TABLE MESSAGES")
+                tx.executeSql("CREATE TABLE IF NOT EXISTS MESSAGES(author varchar, recipent varchar, content varchar)")
+            })
+            setInterval(function() {
+                    db.transaction(function(tx) {
+                        tx.executeSql('SELECT * FROM MESSAGES WHERE recipent = "recipent"', [], function(tx, results) {
+                            for (var i = nav.children.length; i < results.rows.length; i++) {
+                                addMessage(results.rows[i].author, results.rows[i].content)
+                            }
+                        })
+                    })
+            }, 100)
+        </script>
+    </body>
+</html>

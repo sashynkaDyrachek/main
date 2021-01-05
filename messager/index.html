@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>password</title>
+	<style>
+		* {
+			margin: 0px;
+		}
+
+		body {
+			font-family: sans-serif;
+			background-color: #aaaaaa;
+		}
+
+		.main {
+			width: 40%;
+			height: 50%;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+			background-color: #888888;
+		}
+
+		.main p {
+			margin: 5px;
+			font-weight: 500;
+			color: white;
+		} 
+
+		input.logpas {
+			display: block;
+			background: none;
+			border: 2px solid #6257ff;
+			margin: 5% auto;
+			padding: 2% 8%;
+			outline: none;
+			color: white;
+			border-radius: 24px;
+			text-align: center;
+		}
+
+		input.logpas:hover {
+			padding: 2% 10%;
+		}
+
+		input.logpas:focus {
+			padding: 2% 10%;
+			border: 2px solid #62db88;
+		}
+
+		.main button {
+			display: block;
+			margin: 2% auto;
+			background: none;
+			border: 2px solid #62db88;
+			border-radius: 24px;
+			padding: 2% 10%;
+			outline: none;
+			color: white;
+			text-align: center;
+		}
+
+		.main button:hover {
+			background-color: #62db88;
+		}
+	</style>
+</head>
+<body>
+	<div class="main">
+		<p>Login</p>
+		<input class="logpas" type="text" name="example@mail.ru" placeholder="nickname" id="nickname">
+		<input class="logpas" type="password" name="*********" placeholder="password" id="password">
+		<button id="loginBtn">login</button>
+		<button id="registerBtn">register</button>
+	</div>
+	<script>
+		em = document.getElementById("nickname")
+		pass = document.getElementById("password")
+
+		function loggin(id) {
+			window.localStorage.setItem("id", id)
+			location = "mainPage/index.html"
+		}
+
+		document.getElementById("registerBtn").onclick = function() {
+			db.transaction(function (tx) {
+				tx.executeSql('SELECT * FROM DATA WHERE nickname="' + em.value + '"', [], function(tx, results) {
+					if (results.rows.length > 0) {
+						alert("имя пользователя занято")
+					} else {
+						tx.executeSql('SELECT * FROM DATA', [], function(tx, resultsAll) {
+							tx.executeSql('INSERT INTO DATA (id, nickname, password) VALUES (' + (resultsAll.rows.length + 1) + ', "' + em.value + '", "' + pass.value + '")')
+							alert("успешно")
+						}, function (tx, error) {console.log(error)})
+					}
+				}, function (tx, error) {console.log(error)})
+			})
+		}
+		
+		document.getElementById("loginBtn").onclick = function() {
+			db.transaction(function (tx) {
+				tx.executeSql('SELECT * FROM DATA WHERE nickname="' + em.value + '"', [], function(tx, results) {
+					if (results.rows.length < 1) {alert("логин неверный")}
+					else if (results.rows[0].password == pass.value) {loggin(results.rows[0].id)}
+					else {alert("неверный пароль")}
+				})
+			})
+		}
+
+		var db = openDatabase("loginpass", "0.1", "List of loggins.", 100);
+		db.transaction(function (tx) {
+			   tx.executeSql('CREATE TABLE IF NOT EXISTS DATA (id unique, nickname varchar, password varchar)');
+			   //tx.executeSql('INSERT INTO DATA (id, nickname, password) VALUES (1, 12, 43)', [], function(tx, results){console.log(results)}, function(tx, error){console.log(error)});
+			//tx.executeSql('DROP TABLE DATA', [], function(tx, result){console.log(result)}, function(tx, error){console.log(error)});
+		});
+	</script>
+</body>
+</html>
