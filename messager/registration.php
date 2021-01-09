@@ -4,7 +4,7 @@ $password = $_POST["password"];
 if ($login == null || $password == null) {
     die("log pass problem");
 }
-$con = mysqli_connect("localhost", "root", "", "test");
+$con = mysqli_connect("sql2.freemysqlhosting.net", "sql2385960", "fM5*tP1%", "sql2385960");
 if (!$con) {
     die("connection error");
 }
