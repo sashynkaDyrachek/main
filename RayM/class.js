@@ -1,3 +1,17 @@
+const rgb = function(r, g, b) {
+	return r.toString(16) + g.toString(16) + b.toString(16)
+}
+
+function random2(x, y) {
+	return (v * y)%(x + y)
+}
+
+function simplex2(x, y, h) {
+	var zx = Math.floor(x/h)*h
+	var zy = Math.floor(y/h)*h
+	return Belerp(0, 0, h, h, random2(zx, zy), random2(zx + h, zy), random2(zx + h, zy + h), random2(zx, zy + h), x%h, y%h)
+}
+
 const length2 = function(Vector2, Vector21) {
 	return Math.sqrt(Math.pow(Vector2.x - Vector21.x, 2) + Math.pow(Vector2.y - Vector21.y, 2))
 }
@@ -17,9 +31,14 @@ const Elength3 = function(Vector3) {
 const ToColor = function (r, g, b) {
 }
 
-const Line_Interpole = function(x1, y1, x2, y2, x) {
-	let P = y1 + ((y2 - y1)/(x2 - x1))*(x - x1)
-	return P
+const Lerp = function(x1, y1, x2, y2, x) {
+	return y1 + ((y2 - y1)/(x2 - x1))*(x - x1)
+}
+
+const Belerp = function(x1, y1, x2, y2, z1, z2, z3, z4, x, y) {
+	let P1 = Lerp(x1, z1, x2, z2, x)
+	let P2 = Lerp(x2, z3, x1, z4, x)
+	return Math.floor(Lerp(y1, P1, y2, P2, y))
 }
 
 const Interval = function(num, min, max) {
@@ -28,9 +47,13 @@ const Interval = function(num, min, max) {
 	return min + q
 }
 
-const smin = function(a, b, k) {
-	var h = Math.max(k - Math.abs(a - b), 0) / k
-	return Math.min(a, b) - (h * h * h * k * (1/4));
+const mix = function (d1, d2, d3) {
+	return (d1 + d2 + d3) / 3
+}
+
+const smin = function (d1, d2, k) {
+    var h = Math.max(k - Math.abs(d1 - d2), 0.0);
+    return Math.min(d1, d2) - h * h * 0.25 / k;
 }
 
 const Vector2 = function(x, y) {
@@ -223,7 +246,7 @@ const Plane = function (x, y, z) {
 		p = new Vector3(p.x, p.y * Math.cos(this.rotation.x) - p.z * Math.sin(this.rotation.x), p.z * Math.cos(this.rotation.x) + p.y * Math.sin(this.rotation.x))
 		p = new Vector3(p.x * Math.cos(this.rotation.y) - p.z * Math.sin(this.rotation.y), p.y, p.z * Math.cos(this.rotation.y) + p.x * Math.sin(this.rotation.y))
 		p = new Vector3(p.x * Math.cos(this.rotation.z) - p.y * Math.sin(this.rotation.z), p.y * Math.cos(this.rotation.z) - p.x * Math.sin(this.rotation.z), p.z)
-		return Math.abs(p.y)
+		return p.y
 	}
 }
 
@@ -292,15 +315,16 @@ const Ray3 = function(x, y, z) {
 		this.normalize()
 	}
 
-	this.March = function(vect, objects, main) {
+	this.March = function(vect, main) {
 		p = this.pos.copy()
 		let sphere = objects[0]
 		let plane = objects[1]
 		let box = objects[2]
+		let Light = objects[3]
 		vect.normalize()
-		for (let i=0; i<100; i++) {
-			l = Math.min(Math.min(sphere.getLen(p), box.getLen(p)), plane.getLen(p));
-			if (l < 0.01) {
+		for (let i=0; i<250; i++) {
+			l = Math.max(Math.min(-sphere.getLen(p), box.getLen(p)), plane.getLen(p));
+			if (l < 0.001) {
 				if (main) {operations = i}
 				return p
 			}

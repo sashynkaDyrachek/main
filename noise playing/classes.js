@@ -21,15 +21,20 @@ const Interval = function(num, min, max) {
 	return min + q
 }
 
-const Line_Interpole = function(x1, y1, x2, y2, x) {
-	let P = y1 + ((y2 - y1)/(x2 - x1))*(x - x1)
-	return P
+const Lerp = function(x1, y1, x2, y2, x) {
+	return y1 + ((y2 - y1)/(x2 - x1))*(x - x1)
 }
 
-const Beline_Interpole = function(x1, y1, x2, y2, z1, z2, z3, z4, x, y) {
-	let P1 = Line_Interpole(x1, z1, x2, z2, x)
-	let P2 = Line_Interpole(x2, z3, x1, z4, x)
-	return Math.floor(Line_Interpole(y1, P1, y2, P2, y))
+const Belerp = function(x1, y1, x2, y2, z1, z2, z3, z4, x, y) {
+	let P1 = Lerp(x1, z1, x2, z2, x)
+	let P2 = Lerp(x2, z3, x1, z4, x)
+	return Math.floor(Lerp(y1, P1, y2, P2, y))
+}
+
+const Cuberp = function(x1, y1, z1, x2, y2, z2, w1, w2, w3, w4, w5, w6, w7, w8, x, y, z) {
+	let P1 = Belerp(x1, y1, x2, y2, w1, w2, w3, w4, x, y)
+	let P2 = Belerp(x1, y1, x2, y2, w5, w6, w7, w8, x, y)
+	return Math.floor(Lerp(z1, P1, z2, P2, z))
 }
 
 const Vector2 = function(x, y) {

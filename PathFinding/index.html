@@ -1,0 +1,143 @@
+<html>
+<head>
+	<title>A*</title>
+	<style type="text/css">
+		* {
+			margin: 0px;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canv1"></canvas>
+	<script type="text/javascript">
+		var ctx = document.getElementById("canv1").getContext("2d")
+		ctx.canvas.width = width = window.innerWidth
+		ctx.canvas.height = height = window.innerHeight
+	</script>
+	<script type="text/javascript">
+		const Vector2 = function(x, y) {
+			this.x = x
+			this.y = y
+
+			this.copy = function() {
+				return new Vector2(this.x, this.y)
+			}
+
+			this.Dist = function(p) {
+				return Math.sqrt(Math.pow(this.x - p.x, 2) + Math.pow(this.y - p.y, 2))
+			}
+
+			this.Sum = function(p) {
+				return new Vector2(this.x + p.x, this.y + p.y)
+			}
+		}
+
+		const Slot = function(pos, w) {
+			this.pos = pos.copy()
+			this.val = w
+
+			this.copy = function() {
+				return new Slot(this.pos, this.val)
+			}
+		}
+
+		const Min = function (arr) {
+			var r = Infinity
+			for (var i = 0; i < arr.length; i++) {
+				r = Math.min(r, arr[i].val)
+			}
+			return r
+		}
+
+		const MinSlot = function(arr) {
+			var r = new Slot(new Vector2(0, 0), Infinity)
+			for (var i = 0; i < arr.length; i++) {
+				if (r.val > arr[i].val) {
+					r = arr[i]
+				}
+			}
+			return r
+		}
+ 	</script>
+	<script type="text/javascript">
+		ctx.fillStyle = "#FFFFFF"
+		PixSize = 20
+		sceene = []
+		working = true
+		endP = new Vector2(Math.floor(width/PixSize)/2, Math.floor(height/PixSize)/2)
+		startP = new Vector2(endP.x, 0)
+		window.onclick = function() {
+			//startP = new Vector2(Math.floor(event.clientX/PixSize), Math.floor(event.clientY/PixSize))
+			if (sceene[Math.floor(event.clientX/PixSize)] == undefined) {sceene[Math.floor(event.clientX/PixSize)] = []}
+			sceene[Math.floor(event.clientX/PixSize)][Math.floor(event.clientY/PixSize)] = true
+		}
+
+		function find() {
+			//console.log(Math.floor(startP.Dist(endP)))
+			var w = Infinity
+			var r = 0
+			var nextX = 0
+			var nextY = 0
+			var nextW = 0
+			res = [new Slot(startP, Infinity)]
+			var i = 0
+			var wes = [new Slot(startP, Infinity)]
+			var PathLength = 0
+			var e = 0
+			var sceen = sceene
+			while (Math.floor(endP.Dist(wes[wes.length-1].pos)) > 1 && i < 125) {
+				nextX = 0
+				nextY = 0
+				nextW = wes[wes.length-1].val
+				for (x = -1; x <= 1; x++) {
+					for (y = -1; y <= 1; y++) {
+						var z = wes[wes.length-1].pos.Sum(new Vector2(x, y))
+						if (sceene[z.x] == undefined) {sceene[z.x] = []}
+						if (x == 0 && y == 0 || sceene[z.x][z.y]) {continue}
+						Nw = endP.Dist(z)
+						Nw += wes[0].pos.Dist(z)/2
+						res[res.length] = new Slot(z, Nw)
+						if (Nw <= nextW) {
+							nextX = x
+							nextY = y
+							nextW = Nw
+						}
+					}
+				}
+				wes[wes.length] = MinSlot(res).copy()
+				MinSlot(res).val = Infinity
+				i++
+			}
+			sceene = sceen
+			return wes
+		}
+
+		setInterval(function() {
+			ctx.fillRect(0, 0, width, height)
+			ctx.strokeStyle = "#000000"
+
+			if (working) {
+			path = find()
+
+				for (var i = 0; i < path.length; i++) {
+					ctx.strokeRect(path[i].pos.x * PixSize, path[i].pos.y * PixSize, PixSize, PixSize)
+				}
+			}
+			ctx.strokeStyle = "#FF0000"
+
+			for (var x = 0; x < sceene.length; x++) {
+				if (sceene[x] == undefined) {sceene[x] = []}
+				for (var y = 0; y < sceene[x].length; y++) {
+					if (sceene[x][y]) {
+						ctx.strokeRect(x * PixSize, y * PixSize, PixSize, PixSize)
+					}
+				}
+			}
+			ctx.strokeStyle = "#00FF00"
+
+			ctx.strokeRect(startP.x * PixSize, startP.y * PixSize, PixSize, PixSize)
+			ctx.strokeRect(endP.x * PixSize, endP.y * PixSize, PixSize, PixSize)
+		}, 100)
+	</script>
+</body>
+</html>

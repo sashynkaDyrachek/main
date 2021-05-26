@@ -8,10 +8,11 @@
 </head>
   <body>
     <canvas id="canvas1"></canvas>
+    <input type="range" min="1" max="100" id="s" style="transform: fixed;" value="20">
     <script>
       var ctx = document.getElementById("canvas1").getContext("2d")
-      ctx.canvas.width = width = window.innerWidth;
-      ctx.canvas.height = height = window.innerHeight;
+      ctx.canvas.width = window.innerWidth;
+      ctx.canvas.height = window.innerHeight;
     </script>
     <script src="classes.js"></script>
     <script src="canvas.js"></script>

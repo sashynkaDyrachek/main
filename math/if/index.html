@@ -1,0 +1,92 @@
+<html>
+<head>
+	<title>if state</title>
+	<style type="text/css">
+		* {
+			margin: 0px;
+		}
+		div, input {
+			float: left;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="A"></div>
+	<div id="B"></div>
+	<input list="moves" id="mInp"/>
+	<div id="otputdiv"></div>
+	<button id="chageA">A</button>
+	<button id="chageB">B</button>
+
+	<datalist id="moves">
+    	<option value="|"/>
+    	<option value="&"/>
+    	<option value="="/>
+	</datalist>
+
+	<script type="text/javascript">
+		var outdiv = document.getElementById("otputdiv")
+		var Adiv = document.getElementById("A")
+		var Bdiv = document.getElementById("B")
+		var MinpDiv = document.getElementById("mInp")
+		var A = false
+		var B = false
+
+		document.getElementById("chageA").onclick = function() {
+			for (var i = 0; i < 2**2; i++) {
+				Adiv.childNodes[2 * i].value = outdiv.childNodes[i].innerHTML
+			}
+		}
+
+		document.getElementById("chageB").onclick = function() {
+			for (var i = 0; i < 2**2; i++) {
+				Bdiv.childNodes[2 * i].value = outdiv.childNodes[i].innerHTML
+			}
+		}
+
+		function output(text, div, i) {
+			div.childNodes[i].innerHTML = text
+		}
+		function createP(div) {
+			div.append(document.createElement("p"))
+		}
+		function createInp(div, text) {
+			var inp = document.createElement("input")
+			inp.value = text
+			div.append(inp)
+			div.append(document.createElement("br"))
+		}
+
+		for (var a = 0; a <= 1; a++) {
+			for (var b = 0; b <= 1; b++) {
+				createP(outdiv)
+				createInp(Adiv, a)
+				createInp(Bdiv, b)
+			}
+		}
+		setInterval(function() {
+			for (var i = 0; i < 2**2; i++) {
+				var A = Adiv.childNodes[2 * i].value==1
+				var B = Bdiv.childNodes[2 * i].value==1
+				var res = 0
+				switch (MinpDiv.value) {
+					case "|":
+						res = A||B
+						break
+					case "&":
+						res = A&&B
+						break
+					case "=":
+						res = A==B
+						break
+				}
+				if (res) {res = 1}
+				else {res = 0}
+				output(res, otputdiv, i)
+			}
+		}, 10)
+	</script>
+
+</body>
+</html>

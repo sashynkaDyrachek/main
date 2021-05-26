@@ -1,34 +1,50 @@
-var input = new Inp();
-
-window.onmousemove = function() {
-  input.mousePos = new Vector2(event.clientX, event.clientY);
-}
-ctx.canvas.onmousedown = function() {
-}
-window.onkeydown = function() {
-  input.keyPressed = event.key
-}
-window.onkeyup = function() {
-  input.keyPressed = ""
+window.onkeydown = function(event) {
+	if (event.key == "x") {offx+= pl}
+	if (event.key == "y") {offy+= pl}
+	if (event.key == "z") {offz+=0.1 * pl}
+	if (event.key == "h") {h+= pl}
+	if (event.key == "+") {pl = 1}
+	if (event.key == "-") {pl = -1}
 }
 
-var ray = new Ray(250, 250)
-var zray = new Ray(250, 250)
+v = 123456789123456
 
-setInterval(function loop() {
-  ctx.fillStyle = "#FFFFFF"
-  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-  ctx.strokeStyle = "#000000"
+h = 10
 
-  ray.lookAt(input.mousePos)
-  zray.vect = new Vector2(1, 1)
+var zoom = 200
 
-  zray.norm(1)
+pw = width/zoom
+ph = height/zoom
 
-  console.log((ray.vect.x * zray.vect.x + ray.vect.y * zray.vect.y)/(length(ray.vect) * length(zray.vect)) * 100)
+offx = 1000
+offy = 1000
+offz = 1000
 
-  Dine(ray.pos.x, ray.pos.y, ray.pos.x + ray.vect.x * 10, ray.pos.y + ray.vect.y * 10)
+setInterval(function() {
+	ctx.fillStyle = "#FFFFFF"
+	ctx.fillRect(0, 0, width, height)
 
-  ray.draw()
-  zray.draw()
-}, 20)
+	ctx.beginPath()
+
+	ctx.moveTo(0, height/2)
+
+	for (var x = 0; x < zoom; x++) {
+		for (var y = 0; y < zoom; y++) {
+			//var w = simplex(x, h)
+
+			var q = simplex3(x + offx, y + offy, offz, h)
+			//var q = Belerp(0, 0, width, height, 127, 0, 64, 64, pw * x, ph * y)
+			var w = Interval(q, 0, 255).toString(16)
+			if (w.length == 1) {w = "0" + w}
+			//var w = Interval(q, 0, height)
+
+			ctx.fillStyle = "#" + w + w + w
+			ctx.fillRect(pw * x, ph * y, pw, ph)
+			//ctx.lineTo(pw * x, height - w)
+		}
+	}
+	//offz ++
+	//offx ++
+	//offy ++
+	ctx.stroke()
+}, 100)

@@ -31,26 +31,33 @@ window.onmousedown = function() {
 	lightRay.pos = new Vector3(input.mousePos.x, input.mousePos.y, 0)
 }
 
+v = 1234567890123456
+
 //Octahedron Sphere Box Plane Thorus
 var ray = new Ray3(50, 150, 20);
 var lightRay = new Ray3(85, 85, 0);
-var sphere = new Sphere(150, 150, 20, 20)
-var box = new Box(150, 150, 20, 15)
+var sphere = new Sphere(150, 150, 10, 20)
+var box = new Box(150, 150, 10, 15)
 var plane = new Plane(0, 200, 0)
 
-objects = [sphere, plane, box]
+var lightObj = new Sphere(85, 85, 0, 0)
+
+objects = [sphere, plane, box, lightObj]
 
 pix = ctx1.canvas.height/5
 
 w = ctx1.canvas.width/pix
 h = ctx1.canvas.height/pix
 
-offsetY = -200
+offsetY = -250
 offsetX = -90
 setInterval(function loop() {
-	//plane.rotation.z += 0.1
+	//box.rotation.y += 0.1
+	//box.rotation.x += 0.1
 
-	//document.getElementById("Output").innerHTML = ray.pos.x + ", " + ray.pos.y + ", " + ray.pos.z
+	lightObj.pos = lightRay.pos
+
+	document.getElementById("Output").innerHTML = ray.pos.x + ", " + ray.pos.y + ", " + ray.pos.z
 
 
 	/*ctx.moveTo(ray.pos.x, ray.pos.y)
@@ -63,12 +70,13 @@ setInterval(function loop() {
 
 	for (x = 0; x < pix; x++) {
 		for (y = 0; y < pix; y++) {
-			fillStyle1 = ray.March(new Vector3(-Math.sin((y + offsetY) * (90/pix) * (Math.PI/180)), Math.cos((y + offsetY) * (90/pix) * (Math.PI/180)), Math.sin((offsetX + x) * (90/pix) * (Math.PI/180))), objects)
+			fillStyle1 = ray.March(new Vector3(-Math.sin((y + offsetY) * (90/pix) * (Math.PI/180)), Math.cos((y + offsetY) * (90/pix) * (Math.PI/180)), Math.sin((offsetX + x) * (90/pix) * (Math.PI/180))))
 			if (!!fillStyle1) {
 				lightRay.lookAt(fillStyle1)
-				lighted = lightRay.March(lightRay.vect, objects, true)
+				lighted = lightRay.March(lightRay.vect, true)
 				if (Math.floor(lighted.x) == Math.floor(fillStyle1.x)) {
-					operations = 100 - Math.floor(operations)
+					operations = (200 - Math.floor(operations)).toString(16)
+					if (operations.length == 1) {operations = "0" + operations}
 					ctx1.fillStyle = "#" + operations + operations + operations
 				} else {ctx1.fillStyle = "#000000"}
 			} else {ctx1.fillStyle = "#FFFFFF"}
@@ -78,9 +86,9 @@ setInterval(function loop() {
 		}
 	}
 
-	//new Ellipse(sphere.pos.x, sphere.pos.y, sphere.r).draw()
-	//Dine(0, plane.y, ctx.canvas.width, plane.y)
-	//new Square(lightRay.pos.x, lightRay.pos.y, 6).draw()
-	//new Square(box.pos.x, box.pos.y, box.s*2).draw()
+	/*new Ellipse(sphere.pos.x, sphere.pos.y, sphere.r).draw()
+	Dine(0, plane.y, ctx.canvas.width, plane.y)
+	new Square(lightRay.pos.x, lightRay.pos.y, 6).draw()
+	new Square(box.pos.x, box.pos.y, box.s*2).draw()*/
 
-}, 1)
+}, 0.01)

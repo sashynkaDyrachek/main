@@ -1,0 +1,24 @@
+<html>
+    <body>
+        <a id="myLink" href="https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&dt=t&q=hello">123</a>
+    </body>
+    <script>
+        document.querySelector("#myLink").addEventListener("click", function(event){ 
+           event.preventDefault(); 
+           var file = document.getElementById("myLink").getAttribute("href");
+           console.log(file)
+           var rawFile = new XMLHttpRequest();
+           rawFile.open("GET",file,false);
+             rawFile.onreadystatechange = function() {
+                 if(rawFile.readyState === 4) {
+                     if(rawFile.status === 200 || rawFile.status === 0)
+                     {
+                         var allText = rawFile.responseText;
+                         console.log(allText);
+                     }
+                 }
+             }
+             rawFile.send(null);
+       }, false); 
+    </script>
+</html>

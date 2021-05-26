@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <style>
+            body {
+                margin: 0px;
+
+                background-color: tan;
+            }
+            form {
+                position: absolute;
+                margin: 0px;
+                width: 40%;
+                height: 50%;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+
+                text-align: center;
+
+                background-color: #88888888;
+            }
+
+            form p {
+                margin-top: 2%;
+                font-weight: 500;
+                color: white;
+            }
+
+            form input {
+                margin: 2% auto;
+                padding: 2px;
+                display: block;
+                color: white;
+
+                border: solid blue;
+                border-radius: 24px;
+                background: none;
+
+                text-align: center;
+            }
+
+            form input:hover {
+                border: solid limegreen;
+                padding-left: 10%;
+                padding-right: 10%;
+            }
+
+            form input:focus{
+                border: solid yellow;
+            }
+
+            form button {
+                width: 50%;
+                margin: 2% auto;
+                padding: 2px;
+                display: block;
+                color: white;
+
+                background: none;
+                border: solid green;
+                border-radius: 24px;
+            }
+
+            form button:hover {
+                border: solid limegreen;
+                padding-left: 10%;
+                padding-right: 10%;
+            }
+        </style>
+    </head>
+    <body>
+        <form action="login.php" method="POST">
+            <p>Login</p>
+            <input type="text" name="login">
+            <input type="password" name="password">
+            <button name="confirm">confirm</button>
+            <a href="index.html">register</a>
+        </form>
+    </body>
+</html>
