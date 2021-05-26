@@ -323,7 +323,7 @@ const Ray3 = function(x, y, z) {
 		let Light = objects[3]
 		vect.normalize()
 		for (let i=0; i<250; i++) {
-			l = Math.max(Math.min(-sphere.getLen(p), box.getLen(p)), plane.getLen(p));
+			l = Math.min(Math.min(sphere.getLen(p), box.getLen(p)), plane.getLen(p));
 			if (l < 0.001) {
 				if (main) {operations = i}
 				return p
